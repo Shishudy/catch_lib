@@ -6,7 +6,7 @@
 /*   By: rafasant <rafasant@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 18:41:16 by rafasant          #+#    #+#             */
-/*   Updated: 2025/08/08 16:19:11 by rafasant         ###   ########.fr       */
+/*   Updated: 2025/08/11 14:40:30 by rafasant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CATCH_H
 
 # include <unistd.h>
+# include <stdbool.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
@@ -22,8 +23,11 @@
 
 typedef struct s_catch
 {
+	bool		alloc_mem;
 	char		*error_msg;
-	void		(*set_error)(char *s, ...);
+	void		(*set)(char *s, ...);
+	void		(*print)();
+	void		(*free)();
 }				t_catch;
 
 typedef struct s_error_var
@@ -34,7 +38,6 @@ typedef struct s_error_var
 
 /*------------- catch.c -------------*/
 t_catch		*catch(void);
-void		set_error(char *s, ...);
 
 /*------------- create_msg.c -------------*/
 int			check_format(char *str);

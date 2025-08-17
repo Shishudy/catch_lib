@@ -6,26 +6,31 @@
 /*   By: rafasant <rafasant@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 18:40:56 by rafasant          #+#    #+#             */
-/*   Updated: 2025/08/08 16:42:59 by rafasant         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:27:54 by rafasant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "catch.h"
 
-t_catch	*catch(void)
+static void	free_msg(void)
 {
-	static __thread t_catch	catch;
-	static __thread int initialized = 0;
-
-    if (!initialized)
-    {
-        catch.set_error = set_error;
-        initialized = 1;
-    }
-	return (&catch);
+	if (catch()->alloc_mem == true && catch()->error_msg)
+	{
+		free(catch()->error_msg);
+		catch()->alloc_mem = false;
+	}
 }
 
-void	set_error(char *s, ...)
+static void	print_msg(void)
+{
+	if (catch()->error_msg)
+	{
+		write(2, catch()->error_msg, ft_strlen(catch()->error_msg));
+		write(2, "\n", 1);
+	}
+}
+
+static void	set_msg(char *s, ...)
 {
 	va_list		args;
 	t_error_var	*error_vars;
@@ -52,5 +57,22 @@ void	set_error(char *s, ...)
 	build_error_msg(s, error_vars, error_msg);
 	free_vars(error_vars);
 	va_end(args);
+	catch()->alloc_mem = true;
 	catch()->error_msg = error_msg;
+}
+
+t_catch	*catch(void)
+{
+	static __thread t_catch	catch;
+	static __thread int		initialized;
+
+	if (!initialized)
+	{
+		catch.alloc_mem = false;
+		catch.set = set_msg;
+		catch.print = print_msg;
+		catch.free = free_msg;
+		initialized = 1;
+	}
+	return (&catch);
 }
