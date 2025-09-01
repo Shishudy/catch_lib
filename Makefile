@@ -6,7 +6,7 @@
 #    By: rafasant <rafasant@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/07 18:41:12 by rafasant          #+#    #+#              #
-#    Updated: 2025/08/08 17:04:25 by rafasant         ###   ########.fr        #
+#    Updated: 2025/09/01 19:46:56 by rafasant         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,15 +29,15 @@ ${OBJS_DIR}%.o: ${SRCS_DIR}%.c
 all: ${NAME}
 ${NAME} : ${OBJS}
 	@${AR} ${NAME} ${OBJS}
-	@echo "Compiled $(NAME)."
+	@if [ "$(MAKELEVEL)" -eq 0 ]; then echo "Compiled ${NAME}!"; fi
 
 clean: 
 	@${RM} ${OBJS_DIR}
-	@echo "Cleaned object files!"
+	@if [ "$(MAKELEVEL)" -eq 0 ]; then echo "Cleaned object files!"; fi
 
 fclean: clean
 	@${RM} ${NAME}
-	@echo "Cleaned executables!"
+	@if [ "$(MAKELEVEL)" -eq 0 ]; then echo "Cleaned executables!"; fi
 
 re: fclean all
 
