@@ -3,3 +3,6 @@
 */*.out
 */objs/
 .vscode/
+*.o
+*.a
+*.out
